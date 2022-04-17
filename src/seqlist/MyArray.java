@@ -10,20 +10,19 @@ public class MyArray {
      * 向动态数组中添加元素
      */
     //向数组的末尾增加元素
-    public boolean add(int val){
+    public void add(int val){
         data[size] = val;
         size++;
         //如果数组满了，则扩容
         if(size == data.length){
             grow();
         }
-        return true;
     }
 
     //向index索引处添加新元素
     public boolean add(int index, int val){
         if(index < 0 || index > size){
-            System.out.println("val is illegal");
+            System.out.println("index is illegal");
             return false;
         }
         for (int i = size - 1; i >= index; i--) {
@@ -38,7 +37,7 @@ public class MyArray {
         return true;
     }
 
-    //扩容
+    //扩容 - 设置为私有，因为用户不会手动调用到，且用户也不知道什么时候数组满了
     private void grow() {
         this.data = Arrays.copyOf(data, data.length * 2);
     }
@@ -99,7 +98,7 @@ public class MyArray {
      * 删除动态数组中的元素
      */
     //删除当前动态数组中索引为index的元素,删除成功返回删除前的值，否则返回-1
-    public int remove(int index){
+    public int removeIndex(int index){
         //若动态数组中没有元素返回-1
         if (size == 0) {
             System.out.println("seqlist is empty");
@@ -120,20 +119,12 @@ public class MyArray {
 
     //删除动态数组的头元素，若动态数组为空，返回-1
     public int removeFirst(){
-        int ret = data[0];
-        remove(0);
-        return ret;
+        return removeIndex(0);
     }
 
     //删除动态述责的尾元素,若动态数组为空，返回-1
     public int removeLast(){
-        if(size == 0){
-            System.out.println("seqlist is empty");
-            return -1;
-        }
-        int ret = data[size - 1];
-        remove(size - 1);
-        return ret;
+        return removeIndex(size - 1);
     }
 
     //删除第一个元素值为val的元素，删除成功返回true，否则返回false
@@ -143,25 +134,33 @@ public class MyArray {
             System.out.println("value is not exist");
             return false;
         }
-       return remove(index) != -1;
+       return removeIndex(index) != -1;
     }
 
     //删除所有元素值为val的元素值，删除成功返回true，否则返回false
     public boolean removeByValAll(int val){
-        boolean ret = false;
+        int count = 0;//计算删除val的个数
         for (int i = 0; i < size; i++) {
             if(data[i] == val){
-                ret = true;
-                remove(i);
+                removeIndex(i);
+                count++;
+                i--;//删除val之后，再从当前i开始寻找，防止两个连续的val只删了一个
             }
         }
-        return ret;
+        //如果遍历完之后，count为0则说明数组中不存在val
+        if(count == 0){
+            System.out.println("val not exist");
+            return false;
+        }
+        return true;
     }
 
+    //无参构造
     public MyArray(){
         this(10);
     }
 
+    //有参构造
     public MyArray(int initCap){
         this.data = new int[initCap];
     }
