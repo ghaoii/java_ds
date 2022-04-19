@@ -112,7 +112,7 @@ public class MyArray {
         for (int i = index; i < size - 1; i++) {
             data[i] = data[i + 1];
         }
-        data[size - 1] = 0;
+        //data[size - 1] = 0;
         size--;
         return ret;
     }
@@ -138,21 +138,25 @@ public class MyArray {
     }
 
     //删除所有元素值为val的元素值，删除成功返回true，否则返回false
-    public boolean removeByValAll(int val){
-        int count = 0;//计算删除val的个数
+    public void removeByValAll(int val){
         for (int i = 0; i < size; i++) {
-            if(data[i] == val){
+            while( i < size && data[i] == val){
                 removeIndex(i);
-                count++;
-                i--;//删除val之后，再从当前i开始寻找，防止两个连续的val只删了一个
             }
         }
-        //如果遍历完之后，count为0则说明数组中不存在val
-        if(count == 0){
-            System.out.println("val not exist");
-            return false;
-        }
-        return true;
+
+//        boolean ret = false;
+//        for (int i = size - 1; i >= 0; i--) {
+//            if(data[i] == val){
+//                removeIndex(i);
+//                ret = true;
+//            }
+//        }
+//        if(!ret){
+//            System.out.println("val does not exist");
+//            return false;
+//        }
+//        return getByValue(val) == -1;
     }
 
     //无参构造
