@@ -1,24 +1,29 @@
 package seqlist.leetcode;
 
-class ListNode {
-    int val;
-    ListNode next;
+import java.util.List;
 
-    ListNode() {
-    }
 
-    ListNode(int val) {
-        this.val = val;
-    }
-
-    ListNode(int val, ListNode next) {
-        this.val = val;
-        this.next = next;
-    }
-}
 
 
 public class Num203_RemoveElements {
+
+    /**
+     * 通过带头链表解决
+     */
+    public ListNode removeElements(ListNode head, int val) {
+        ListNode dummyHead = new ListNode();
+        dummyHead.next = head;
+        ListNode prev = dummyHead;
+        while(prev.next != null){
+            if(prev.next.val == val){
+                prev.next = prev.next.next;
+            }else{
+                prev = prev.next;
+            }
+        }
+        return dummyHead.next;
+    }
+
 
     /**
      * 递归解决
@@ -27,16 +32,16 @@ public class Num203_RemoveElements {
      * @param val
      * @return
      */
-    public ListNode removeElements(ListNode head, int val) {
-        if(head == null){
-            return null;
-        }
-        head.next = removeElements(head.next, val);
-        if(head.val == val){
-            head = head.next;
-        }
-        return head;
-    }
+//    public ListNode removeElements(ListNode head, int val) {
+//        if(head == null){
+//            return null;
+//        }
+//        head.next = removeElements(head.next, val);
+//        if(head.val == val){
+//            head = head.next;
+//        }
+//        return head;
+//    }
 
 
 

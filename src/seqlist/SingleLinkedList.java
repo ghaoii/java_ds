@@ -1,15 +1,20 @@
 package seqlist;
 
 
-class Node{
+class Node {
     int data;
     Node next;
 
-    public Node(int data){
+    public Node(int data) {
         this.data = data;
     }
 
-    public Node(){
+    public Node(int data, Node next) {
+        this.data = data;
+        this.next = next;
+    }
+
+    public Node() {
 
     }
 }
@@ -19,10 +24,10 @@ public class SingleLinkedList {
     private int size;
 
     //toString
-    public String toString(){
+    public String toString() {
         Node x = head;
         String ret = "";
-        while(x != null){
+        while (x != null) {
             ret += x.data;
             ret += "->";
             x = x.next;
@@ -31,8 +36,8 @@ public class SingleLinkedList {
         return ret;
     }
 
-    private boolean indexLegal(int index){
-        if(index < 0 || index >= size){
+    private boolean indexLegal(int index) {
+        if (index < 0 || index >= size) {
             return false;
         }
         return true;
@@ -44,9 +49,9 @@ public class SingleLinkedList {
      */
 
     //头插法
-    public void addFirst(int val){
+    public void addFirst(int val) {
         Node node = new Node(val);
-        if(head != null){
+        if (head != null) {
             node.next = head;
         }
         head = node;
@@ -54,13 +59,13 @@ public class SingleLinkedList {
     }
 
     //在index处插入
-    public void addIndex(int index, int val){
-        if(index < 0 || index > size){
+    public void addIndex(int index, int val) {
+        if (index < 0 || index > size) {
             System.out.println("add index is illegal");
             return;
         }
         //如果是下标是0，则是头插
-        if(index == 0){
+        if (index == 0) {
             addFirst(val);
             return;
         }
@@ -76,7 +81,7 @@ public class SingleLinkedList {
     }
 
     //尾插法
-    public void addLast(int val){
+    public void addLast(int val) {
         addIndex(size, val);
     }
 
@@ -86,44 +91,46 @@ public class SingleLinkedList {
      */
 
     //在链表中找到值为val的元素，并返回下标，否则返回-1
-    public int getByval(int val){
-        Node prev = head;
+    public int getByval(int val) {
+        Node node = head;
         int num = 0;
-        while(prev != null){
-            if(prev.data == val){
+        while (node != null) {
+            if (node.data == val) {
                 return num;
             }
             num++;
-            prev = prev.next;
+            node = node.next;
         }
         return -1;
-
-        //第二种写法
-//        for (int i = 0; prev != null && i < size; i++) {
-//            if(prev.data == val){
+    }
+//    //写法二
+//    public int getByval(int val) {
+//        int index = 0;
+//        for (Node node = head; node != null; i++) {
+//            if (node.data == val) {
 //                return i;
 //            }
-//            prev = prev.next;
+//            node = node.next;
 //        }
 //        return -1;
-    }
+//    }
 
     //查找链表中是否包含val
-    public boolean contains(int val){
+    public boolean contains(int val) {
         return getByval(val) != -1;
     }
 
-    //超找链表中，下标为index的元素值
-    public int getByIndex(int index){
-        if(!indexLegal(index)){
+    //查找链表中，下标为index的元素值
+    public int getByIndex(int index) {
+        if (!indexLegal(index)) {
             System.out.println("get index is illegal");
             return -1;
         }
-        Node prev = head;
+        Node node = head;
         for (int i = 0; i < index; i++) {
-            prev = prev.next;
+            node = node.next;
         }
-        return prev.data;
+        return node.data;
     }
 
     /**
@@ -131,17 +138,17 @@ public class SingleLinkedList {
      */
 
     //将下标为index的结点的值修改为newVal，并返回旧的值
-    public int set(int index, int newVal){
-        if(!indexLegal(index)){
+    public int set(int index, int newVal) {
+        if (!indexLegal(index)) {
             System.out.println("set index is illegal");
             return -1;
         }
-        Node prev = head;
+        Node node = head;
         for (int i = 0; i < index; i++) {
-            prev = prev.next;
+            node = node.next;
         }
-        int oldVal = prev.data;
-        prev.data = newVal;
+        int oldVal = node.data;
+        node.data = newVal;
         return oldVal;
     }
 
@@ -150,37 +157,37 @@ public class SingleLinkedList {
      */
 
     //删除索引为index位置的元素，返回删除前的元素值
-    public int remove(int index){
-        if(!indexLegal(index)){
+    public int remove(int index) {
+        if (!indexLegal(index)) {
             System.out.println("remove index illegal");
             return -1;
         }
-        if(index == 0){
+        if (index == 0) {
             Node prev = head;
             head = head.next;
             prev.next = null;
             size--;
             return prev.data;
-        }else{
+        } else {
             Node prev = head;
             for (int i = 0; i < index - 1; i++) {
                 prev = prev.next;
             }
-            Node x = prev.next;
-            prev.next = x.next;
-            x.next = null;
+            Node node = prev.next;
+            prev.next = node.next;
+            node.next = null;
             size--;
-            return x.data;
+            return node.data;
         }
     }
 
     //删除链表中第一个值为val的节点，返回是否删除成功
-    public void removeValOnce(int val){
-        if(head == null){
+    public void removeValOnce(int val) {
+        if (head == null) {
             System.out.println("LinkedList is empty");
         }
         //头结点就是待删除元素
-        if(head.data == val){
+        if (head.data == val) {
             Node x = head;
             head = x.next;
             x.next = null;
@@ -189,8 +196,8 @@ public class SingleLinkedList {
         }
 
         Node prev = head;
-        while(prev.next != null){
-            if(prev.next.data == val){
+        while (prev.next != null) {
+            if (prev.next.data == val) {
                 Node x = prev.next;
                 prev.next = x.next;
                 x.next = null;
@@ -201,38 +208,38 @@ public class SingleLinkedList {
     }
 
     //删除链表中所有值为val的结点
-    public void removeAllVal(int val){
+    public void removeAllVal(int val) {
         //如果头结点是待删除元素
-        while(head != null && head.data == val){
+        while (head != null && head.data == val) {
             Node x = head;
             head = x.next;
             x.next = null;
             size--;
         }
         //如果整个链表都已经删完了，直接退出
-        if(head == null){
+        if (head == null) {
             return;
         }
         Node prev = head;
-        while(prev.next != null){
-            if(prev.next.data == val){
+        while (prev.next != null) {
+            if (prev.next.data == val) {
                 Node x = prev.next;
                 prev.next = x.next;
                 x.next = null;
                 size--;
-            }else{
+            } else {
                 prev = prev.next;
             }
         }
     }
 
     //删除头结点
-    public void removeFirst(){
+    public void removeFirst() {
         remove(0);
     }
 
     //删除尾结点
-    public void removeLast(){
+    public void removeLast() {
         remove(size - 1);
     }
 
