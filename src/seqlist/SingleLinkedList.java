@@ -31,6 +31,13 @@ public class SingleLinkedList {
         return ret;
     }
 
+    private boolean indexLegal(int index){
+        if(index < 0 || index >= size){
+            return false;
+        }
+        return true;
+    }
+
 
     /**
      * 向当前链表中添加元素
@@ -90,6 +97,8 @@ public class SingleLinkedList {
             prev = prev.next;
         }
         return -1;
+
+        //第二种写法
 //        for (int i = 0; prev != null && i < size; i++) {
 //            if(prev.data == val){
 //                return i;
@@ -106,7 +115,7 @@ public class SingleLinkedList {
 
     //超找链表中，下标为index的元素值
     public int getByIndex(int index){
-        if(index < 0 || index >= size){
+        if(!indexLegal(index)){
             System.out.println("get index is illegal");
             return -1;
         }
@@ -123,7 +132,7 @@ public class SingleLinkedList {
 
     //将下标为index的结点的值修改为newVal，并返回旧的值
     public int set(int index, int newVal){
-        if(index < 0 || index >= size){
+        if(!indexLegal(index)){
             System.out.println("set index is illegal");
             return -1;
         }
@@ -131,15 +140,100 @@ public class SingleLinkedList {
         for (int i = 0; i < index; i++) {
             prev = prev.next;
         }
-        int ret = prev.data;
+        int oldVal = prev.data;
         prev.data = newVal;
-        return ret;
+        return oldVal;
     }
 
     /**
      * 删除链表中的元素
      */
 
-    //删除索引为index位置的元素
+    //删除索引为index位置的元素，返回删除前的元素值
+    public int remove(int index){
+        if(!indexLegal(index)){
+            System.out.println("remove index illegal");
+            return -1;
+        }
+        if(index == 0){
+            Node prev = head;
+            head = head.next;
+            prev.next = null;
+            size--;
+            return prev.data;
+        }else{
+            Node prev = head;
+            for (int i = 0; i < index - 1; i++) {
+                prev = prev.next;
+            }
+            Node x = prev.next;
+            prev.next = x.next;
+            x.next = null;
+            size--;
+            return x.data;
+        }
+    }
+
+    //删除链表中第一个值为val的节点，返回是否删除成功
+    public void removeValOnce(int val){
+        if(head == null){
+            System.out.println("LinkedList is empty");
+        }
+        //头结点就是待删除元素
+        if(head.data == val){
+            Node x = head;
+            head = x.next;
+            x.next = null;
+            size--;
+            return;
+        }
+
+        Node prev = head;
+        while(prev.next != null){
+            if(prev.next.data == val){
+                Node x = prev.next;
+                prev.next = x.next;
+                x.next = null;
+            }
+            prev = prev.next;
+        }
+        System.out.println("val is not existing");
+    }
+
+    //删除链表中所有值为val的结点
+    public void removeAllVal(int val){
+        //如果头结点是待删除元素
+        while(head != null && head.data == val){
+            Node x = head;
+            head = x.next;
+            x.next = null;
+            size--;
+        }
+        //如果整个链表都已经删完了，直接退出
+        if(head == null){
+            return;
+        }
+        Node prev = head;
+        while(prev.next != null){
+            if(prev.next.data == val){
+                Node x = prev.next;
+                prev.next = x.next;
+                x.next = null;
+                size--;
+            }else{
+                prev = prev.next;
+            }
+        }
+    }
+
+    //删除头结点
+    public void removeFirst(){
+        remove(0);
+    }
+
+    //删除尾结点
+    public void removeLast(){
+        remove(size - 1);
+    }
 
 }

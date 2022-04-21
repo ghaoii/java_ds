@@ -6,6 +6,7 @@ public class LinkedListTest {
         singleLinkedList.addLast(10);
         singleLinkedList.addLast(20);
         singleLinkedList.addLast(30);
+        singleLinkedList.addLast(40);
         System.out.println(singleLinkedList.set(2, 300));
         System.out.println(singleLinkedList);
     }
