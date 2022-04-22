@@ -19,8 +19,8 @@ public class Num83_DeleteDuplicates {
 //            }
 //            prev.next = cur;
 //            prev = prev.next;
-
-            //解法一
+//
+        // 解法一
             if(prev.val != cur.val){
                 prev.next = cur;
                 prev = prev.next;

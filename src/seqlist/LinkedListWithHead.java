@@ -16,6 +16,10 @@ public class LinkedListWithHead {
         return ret;
     }
 
+    private boolean rangeCheck(int index){
+        return index >= 0 && index < size;
+    }
+
     /**
      * 增加
      */
@@ -108,6 +112,75 @@ public class LinkedListWithHead {
                 prev = prev.next;
             }
         }
+    }
+
+    /**
+     * 查找链表中的元素
+     */
+
+    //找出链表中第一个值为val的结点下标，否则返回-1
+    public int getByVal(int val){
+        int num = 0;
+        Node node = dummyHead.next;
+        while(node != null){
+            if(node.data == val){
+                return num;
+            }
+            num++;
+            node = node.next;
+        }
+        return -1;
+    }
+
+    //查找链表中是否包含元素值为val的结点
+    public boolean contains(int val){
+        return getByVal(val) != -1;
+    }
+
+    //查找链表中下标为index的结点的元素值
+    public int getByIndex(int index){
+        if(!rangeCheck(index)){
+            System.out.println("get index illegal");
+            return -1;
+        }
+        Node node = dummyHead.next;
+        for (int i = 0; i < index; i++) {
+            node = node.next;
+        }
+        return node.data;
+    }
+
+    /**
+     * 修改
+     */
+
+    //将链表中索引为index的结点的元素修改为newVal，并返回修改前的元素值
+    public int set(int index, int newVal){
+        if(!rangeCheck(index)){
+            System.out.println("set index illegal");
+            return -1;
+        }
+        Node node = dummyHead.next;
+        for (int i = 0; i < index; i++) {
+            node = node.next;
+        }
+        int oldVal = node.data;
+        node.data = newVal;
+        return oldVal;
+    }
+
+    //将链表中第一个元素值为oldVal的元素值改为newOld，返回是否修改成功
+    public boolean setByVal(int oldVal, int newVal){
+        Node node = dummyHead.next;
+        while(node != null){
+            if(node.data == oldVal){
+                node.data = newVal;
+                return true;
+            }
+            node = node.next;
+        }
+        System.out.println("oldVal does not exist");
+        return false;
     }
 
 }
