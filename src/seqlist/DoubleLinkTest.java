@@ -3,9 +3,11 @@ package seqlist;
 public class DoubleLinkTest {
     public static void main(String[] args) {
         DoubleLinkedList doubleLinkedList = new DoubleLinkedList();
-        doubleLinkedList.addFirst(50);
-        doubleLinkedList.addFirst(30);
-        doubleLinkedList.addFirst(10);
+        doubleLinkedList.addLast(20);
+        doubleLinkedList.addLast(20);
+        doubleLinkedList.addLast(20);
+        doubleLinkedList.addLast(20);
+        doubleLinkedList.removeValAll(20);
         System.out.println(doubleLinkedList);
     }
 }
