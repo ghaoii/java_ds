@@ -141,7 +141,7 @@ public class MyBinTree<E> {
         if(root == null){
             return false;
         }
-        if(root.val == val){
+        if(root.val.equals(val)){
             return true;
         }
         return contains(root.left, val) || contains(root.right, val);
