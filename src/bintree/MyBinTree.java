@@ -1,5 +1,8 @@
 package bintree;
 
+import java.util.Deque;
+import java.util.LinkedList;
+
 class TreeNode<E> {
     E val;
     TreeNode<E> left;
@@ -72,6 +75,23 @@ public class MyBinTree<E> {
         System.out.print(root.val + " ");
     }
 
+    public void levelOrder(TreeNode root){
+        Deque<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        TreeNode node = root;
+        while(!queue.isEmpty()){
+            node = queue.poll();
+            System.out.print(node.val + " ");
+            if(node.left != null){
+                queue.offer(node.left);
+            }
+            if(node.right != null){
+                queue.offer(node.right);
+            }
+        }
+    }
+
+
     /**
      * 传入一个二叉树的根结点，就能返回该二叉树的结点个数
      * @param root
@@ -84,6 +104,26 @@ public class MyBinTree<E> {
         return 1 + getNodes(root.left) + getNodes(root.right);
         //可以简化为一句话
         //return root == null ? 0 : 1 + getNodes(root.left) + getNodes(root.right);
+    }
+
+    public int getNodesNonRecursion(TreeNode root){
+        if(root == null){
+            return 0;
+        }
+        Deque<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int size = 0;
+        while(!queue.isEmpty()){
+            TreeNode node = queue.poll();
+            size++;
+            if(node.left != null){
+                queue.offer(node.left);
+            }
+            if(node.right != null){
+                queue.offer(node.right);
+            }
+        }
+        return size;
     }
 
     /**
@@ -99,6 +139,28 @@ public class MyBinTree<E> {
             return 1;
         }
         return getLeafNodes(root.left) + getLeafNodes(root.right);
+    }
+
+    public int getLeafNodesNonRecursion(TreeNode root){
+        if(root == null){
+            return 0;
+        }
+        Deque<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int leafSize = 0;
+        while(!queue.isEmpty()){
+                TreeNode node = queue.poll();
+                if(node.left != null){
+                    queue.offer(node.left);
+                }
+                if(node.right != null){
+                    queue.offer(node.right);
+                }
+                if(node.left == null && node.right == null){
+                    leafSize++;
+                }
+        }
+        return leafSize;
     }
 
     /**
@@ -118,6 +180,34 @@ public class MyBinTree<E> {
         return getKLevelNodes(root.left, k - 1) + getKLevelNodes(root.right, k - 1);
     }
 
+    public int getKLevelNodesNonRecursion(TreeNode root, int k){
+        if(root == null){
+            return 0;
+        }
+        if(k < 0){
+            return -1;
+        }
+        Deque<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            if(k == 1){
+                return size;
+            }
+            for (int i = 0; i < size; i++) {
+                TreeNode cur = queue.poll();
+                if(cur.left != null){
+                    queue.offer(cur.left);
+                }
+                if(cur.right != null){
+                    queue.offer(cur.right);
+                }
+            }
+            k--;
+        }
+        return -1;
+    }
+
     /**
      * 传入一个二叉树的根结点，就能返回该二叉树的高度
      * @param root
@@ -129,6 +219,29 @@ public class MyBinTree<E> {
         }
         //树的高度 = 当前层 + 子树中的高度
         return 1 + Math.max(height(root.left), height(root.right));
+    }
+
+    public int heightNonRecursion(TreeNode root){
+        if(root == null){
+            return 0;
+        }
+        int height = 0;
+        Deque<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode cur = queue.poll();
+                if(cur.left != null){
+                    queue.offer(cur.left);
+                }
+                if(cur.right != null){
+                    queue.offer(cur.right);
+                }
+            }
+            height++;
+        }
+        return height;
     }
 
     /**
