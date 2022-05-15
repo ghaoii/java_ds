@@ -49,6 +49,26 @@ public class MyBinTree<E> {
         preOrder(root.right);
     }
 
+    //前序遍历迭代写法
+    public void preOrderNonRecursion(TreeNode root){
+        if(root == null){
+            return;
+        }
+        Deque<TreeNode> stack = new LinkedList<>();
+        stack.push(root);
+        while(!stack.isEmpty()){
+            TreeNode cur = stack.pop();
+            System.out.print(cur.val + " ");
+            if(cur.right != null){
+                stack.push(cur.right);
+            }
+            if(cur.left != null){
+                stack.push(cur.left);
+            }
+        }
+    }
+
+
     /**
      * 传入根结点，就能按照中序遍历的方式输出 - 左根右
      * @param root
@@ -62,6 +82,24 @@ public class MyBinTree<E> {
         inOrder(root.right);
     }
 
+    //中序遍历迭代写法
+    public void inOrderNonRecursion(TreeNode root){
+        if(root == null){
+            return;
+        }
+        Deque<TreeNode> stack = new LinkedList<>();
+        TreeNode cur = root;
+        while(cur != null || !stack.isEmpty()){
+            while(cur != null){
+                stack.push(cur);
+                cur = cur.left;
+            }
+            cur = stack.pop();
+            System.out.print(cur.val + " ");
+            cur = cur.right;
+        }
+    }
+
     /**
      * 传入根结点，就能根据后序遍历的方式输出 - 左右根
      * @param root
@@ -73,6 +111,31 @@ public class MyBinTree<E> {
         postOrder(root.left);
         postOrder(root.right);
         System.out.print(root.val + " ");
+    }
+
+    //后序遍历迭代写法
+    public void postOrderNonRecursion(TreeNode root){
+        if(root == null){
+            return;
+        }
+        Deque<TreeNode> stack = new LinkedList<>();
+        TreeNode cur = root;
+        TreeNode prev = null;
+        while(cur != null || !stack.isEmpty()){
+            while(cur != null){
+                stack.push(cur);
+                cur = cur.left;
+            }
+            cur = stack.pop();
+            if(cur.right == null || cur.right == prev){
+                System.out.print(cur.val + " ");
+                prev = cur;
+                cur = null;
+            }else{
+                stack.push(cur);
+                cur = cur.right;
+            }
+        }
     }
 
     public void levelOrder(TreeNode root){

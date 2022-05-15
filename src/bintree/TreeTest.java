@@ -5,6 +5,15 @@ public class TreeTest {
     public static void main(String[] args) {
         MyBinTree<TreeNode<Character>> binTree = new MyBinTree<>();
         binTree.build();
+        System.out.print("前序遍历的结果是：");
+        binTree.preOrderNonRecursion(binTree.root);
+        System.out.println();
+        System.out.print("中序遍历的结果是：");
+        binTree.inOrderNonRecursion(binTree.root);
+        System.out.println();
+        System.out.print("后序遍历的结果是：");
+        binTree.postOrderNonRecursion(binTree.root);
+        System.out.println();
         System.out.print("层序遍历的结果是：");
         binTree.levelOrder(binTree.root);
         System.out.println();
