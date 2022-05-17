@@ -3,8 +3,8 @@ package bintree.leetcode;
 public class Num106_InAndPostBuildTree {
     private int index = 0;
     public TreeNode buildTree(int[] inorder, int[] postorder) {
-        int[] revOrder = reverse(postorder);
-        return build(inorder, revOrder, 0, revOrder.length - 1);
+        reverse(postorder);
+        return build(inorder, postorder, 0, postorder.length - 1);
     }
 
     public TreeNode build(int[] inorder, int[] revOrder, int left, int right){
@@ -31,7 +31,7 @@ public class Num106_InAndPostBuildTree {
         return -1;
     }
 
-    private int[] reverse(int[] postorder){
+    private void reverse(int[] postorder){
         int left = 0;
         int right = postorder.length - 1;
         while(left < right){
@@ -41,6 +41,5 @@ public class Num106_InAndPostBuildTree {
             left++;
             right--;
         }
-        return postorder;
     }
 }
