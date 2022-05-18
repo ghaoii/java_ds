@@ -1,6 +1,6 @@
 package seqlist.quque.impl;
 
-import seqlist.quque.Quque;
+import seqlist.quque.Queue;
 
 import java.util.NoSuchElementException;
 
@@ -14,7 +14,7 @@ class Node<E> {
 }
 
 
-public class LinkedQuque<E> implements Quque<E> {
+public class LinkedQueue<E> implements Queue<E> {
     Node<E> head;
     Node<E> tail;
     int size;

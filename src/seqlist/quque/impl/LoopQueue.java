@@ -1,11 +1,10 @@
 package seqlist.quque.impl;
 
-import seqlist.quque.Quque;
+import seqlist.quque.Queue;
 
 import java.util.NoSuchElementException;
-import java.util.Queue;
 
-public class LoopQueue implements Quque<Integer> {
+public class LoopQueue implements Queue<Integer> {
     private Integer[] data;
     private int head;
     private int tail;
