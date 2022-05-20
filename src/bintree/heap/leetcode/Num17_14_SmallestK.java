@@ -5,12 +5,6 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-//class IntegerReverse implements Comparator<Integer> {
-//    @Override
-//    public int compare(Integer o1, Integer o2) {
-//        return o2 - o1;
-//    }
-//}
 
 public class Num17_14_SmallestK {
     public int[] smallestK(int[] arr, int k) {
@@ -42,12 +36,5 @@ public class Num17_14_SmallestK {
             i++;
         }
         return ret;
-    }
-
-    public static void main(String[] args) {
-        int[] arr = {1,3,5,7,2,4,6,8};
-        Num17_14_SmallestK test = new Num17_14_SmallestK();
-        int[] ret = test.smallestK(arr, 4);
-        System.out.println(Arrays.toString(ret));
     }
 }

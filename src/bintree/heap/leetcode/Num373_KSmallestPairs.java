@@ -2,39 +2,54 @@ package bintree.heap.leetcode;
 
 import java.util.*;
 
+class SumNode{
+    int u;
+    int v;
+
+    public SumNode(int u, int v) {
+        this.u = u;
+        this.v = v;
+    }
+}
+
+/**
+ * 找到和最小的K对数 - 取小用大
+ */
+
 public class Num373_KSmallestPairs {
     public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
-        Queue<List<Integer>> queue = new PriorityQueue<>(new Comparator<List<Integer>>() {
+        Queue<SumNode> queue = new PriorityQueue<>(new Comparator<SumNode>() {
             @Override
-            public int compare(List<Integer> o1, List<Integer> o2) {
-                return add(o2) - add(o1);
+            public int compare(SumNode o1, SumNode o2) {
+                return o2.u + o2.v - (o1.u + o1.v);
             }
         });
-
-        for (int i = 0; i < nums1.length; i++) {
-            for (int j = 0; j < nums2.length; j++) {
-                List<Integer> inner = new ArrayList<>();
-                inner.add(nums1[i]);
-                inner.add(nums2[j]);
+        //遍历两个数组，将元素和最小的K对数存入堆中
+        for (int i = 0; i < nums1.length && i < k; i++) {
+            for (int j = 0; j < nums2.length && j < k; j++) {
                 if(queue.size() < k){
-                    queue.offer(inner);
+                    queue.offer(new SumNode(nums1[i], nums2[j]));
                 }else{
-                    if(add(inner) < add(queue.peek())){
+                    SumNode tmp = queue.peek();
+                    int sum = tmp.u + tmp.v;
+                    if(nums1[i] + nums2[j] < sum){
                         queue.poll();
-                        queue.offer(inner);
+                        queue.offer(new SumNode(nums1[i], nums2[j]));
                     }
                 }
             }
         }
-
+        //此时堆中存储的是和最小的K对数
+        //遍历优先级队列，将堆中元素存入二维数组
         List<List<Integer>> ret = new ArrayList<>();
         while(!queue.isEmpty()){
-            ret.add(queue.poll());
+            List<Integer> inner = new ArrayList<>();
+            SumNode tmp = queue.poll();
+            inner.add(tmp.u);
+            inner.add(tmp.v);
+            ret.add(inner);
         }
         return ret;
     }
 
-    private int add(List<Integer> arr){
-        return arr.get(0) + arr.get(1);
-    }
 }
