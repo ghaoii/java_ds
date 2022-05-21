@@ -1,5 +1,7 @@
 package bintree;
 
+import com.sun.media.sound.SF2Instrument;
+
 public class BSTTest {
     public static void main(String[] args) {
         MyBinSearchTree binSearchTree = new MyBinSearchTree();
@@ -9,11 +11,11 @@ public class BSTTest {
         binSearchTree.add(11);
         binSearchTree.add(17);
         binSearchTree.add(25);
-        binSearchTree.add(31);
-        binSearchTree.add(9);
         binSearchTree.add(12);
-        binSearchTree.add(30);
-        System.out.println(binSearchTree.contains(20));
+//        System.out.println(binSearchTree.findMin());
+//        System.out.println(binSearchTree.findMax());
+
+        binSearchTree.remove(15);
         System.out.println(binSearchTree);
     }
 }
