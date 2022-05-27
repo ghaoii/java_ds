@@ -1,14 +1,137 @@
 package sort;
 
-import java.util.Arrays;
-
 public class SevenSort {
     public static void main(String[] args) {
-        int arr[] = { 19, 28, 32, 15, 25, 22, 18 };
-        heapSort(arr);
-        System.out.println(Arrays.toString(arr));
+        int n = 100000;
+        int[] arr = SortHelper.generaRandomArray(n, 0, Integer.MAX_VALUE);
+        //SortHelper.testSort(SortHelper.arrCopy(arr), "selectionSort");
+        //SortHelper.testSort(SortHelper.arrCopy(arr), "selectionSortOP");
+        SortHelper.testSort(SortHelper.arrCopy(arr), "insertionSort");
+        SortHelper.testSort(SortHelper.arrCopy(arr), "insertionSortBS");
+        SortHelper.testSort(SortHelper.arrCopy(arr), "heapSort");
     }
 
+    /**
+     * 直接插入排序
+     * 已排序区间[0, i)，第一个元素默认已经排好序
+     * 待排序区间[i, n)
+     * @param arr
+     */
+    public static void insertionSort(int[] arr){
+        for (int i = 1; i < arr.length; i++) {
+            //让j指向待排序元素区间的第一个元素
+            for (int j = i; j >= 1 && arr[j] < arr[j - 1]; j--) {
+                //只有当arr[j] < arr[j - 1]时，才需要移动元素，直到该元素已到达合适位置
+                swap(arr, j, j - 1);
+            }
+        }
+    }
+
+    /**
+     * 折半插入排序
+     * @param arr
+     */
+    public static void insertionSortBS(int[] arr){
+        for (int i = 1; i < arr.length; i++) {
+            int k = arr[i];
+            int low = 0;
+            int high = i;
+            while(low <= high){
+                int mid = (low + high) / 2;
+                if(arr[mid] < arr[i]){
+                    low = mid + 1;
+                }else{
+                    high = mid - 1;
+                }
+            }
+            for (int j = i; j > low; j--) {
+                arr[j] = arr[j - 1];
+            }
+            arr[low] = k;
+        }
+    }
+
+    /**
+     * 双向选择排序
+     * @param arr
+     */
+    public static void selectionSortOP(int[] arr){
+        int left = 0;
+        int right = arr.length - 1;
+        //待排序区间 [left, right]
+        while(left < right){
+            int min = left;
+            int max = left;
+            for (int i = left + 1; i <= right; i++) {
+                if(arr[i] < arr[min]){
+                    min = i;
+                }
+                if(arr[i] > arr[max]){
+                    max = i;
+                }
+            }
+            swap(arr, min, left);
+            //如果交换前的left正好是最大值，那么交换后要重新让max指向最大值
+            if(max == left){
+                max = min;
+            }
+            swap(arr, max, right);
+            left++;
+            right--;
+        }
+    }
+
+    /**
+     * 直接选择排序
+     * @param arr
+     */
+    public static void selectionSort(int[] arr){
+        //外层循环是走的趟数，每走一趟，就有一个元素排序好了
+        for (int i = 0; i < arr.length - 1; i++) {
+            //选择最小值
+            int min = i;
+            //内层循环找到待排序元素中的最小值
+            for (int j = i + 1; j < arr.length; j++) {
+                if(arr[j] < arr[min]){
+                    min = j;
+                }
+            }
+            swap(arr, i, min);
+
+            //选择最大值
+//            int max = 0;
+//            for (int j = 1; j < arr.length - i; j++) {
+//                if(arr[j] > arr[max]){
+//                    max = j;
+//                }
+//            }
+//            swap(arr, arr.length - 1 - i, max);
+        }
+    }
+
+    /**
+     * 冒泡排序
+     * @param arr
+     */
+    public static void bubbleSort(int[] arr){
+        for (int i = 0; i < arr.length - 1; i++) {
+            boolean isSorted = true;
+            for (int j = 0; j < arr.length - 1 - i; j++) {
+                if(arr[j] > arr[j + 1]){
+                    swap(arr, j, j + 1);
+                    isSorted = false;
+                }
+            }
+            if(isSorted){
+                break;
+            }
+        }
+    }
+
+    /**
+     * 堆排序
+     * @param arr
+     */
     public static void heapSort(int[] arr){
         //先把数组堆化，构建为一个最大堆
         for (int i = (arr.length - 1 - 1) / 2; i >= 0; i--) {
