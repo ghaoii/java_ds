@@ -2,14 +2,158 @@ package sort;
 
 public class SevenSort {
     public static void main(String[] args) {
-        int n = 100000;
+        int n = 10000000;
+        //int[] arr = SortHelper.generateSortedArray(n, 10);
         int[] arr = SortHelper.generaRandomArray(n, 0, Integer.MAX_VALUE);
         //SortHelper.testSort(SortHelper.arrCopy(arr), "selectionSort");
         //SortHelper.testSort(SortHelper.arrCopy(arr), "selectionSortOP");
-        SortHelper.testSort(SortHelper.arrCopy(arr), "insertionSort");
-        SortHelper.testSort(SortHelper.arrCopy(arr), "insertionSortBS");
+        //SortHelper.testSort(SortHelper.arrCopy(arr), "insertionSort");
+        //SortHelper.testSort(SortHelper.arrCopy(arr), "insertionSort2");
+        //SortHelper.testSort(SortHelper.arrCopy(arr), "insertionSortBS");
+        SortHelper.testSort(SortHelper.arrCopy(arr), "shellSort");
         SortHelper.testSort(SortHelper.arrCopy(arr), "heapSort");
+        SortHelper.testSort(SortHelper.arrCopy(arr), "mergeSort");
+        SortHelper.testSort(SortHelper.arrCopy(arr), "mergeSortNonRecursion");
     }
+
+    /**
+     * 迭代实现归并排序
+     * @param arr
+     */
+    public static void mergeSortNonRecursion(int[] arr){
+        //最外层的循环表示每次合并的子数组的元素个数
+        //第一次子数组为1个元素，第二次为2个，第三次为4个…直到整个数组合并完成
+        for(int sz = 1; sz <= arr.length; sz += sz){
+            //内层循环表示merge操作，i表示每次合并操作的开始索引
+            for (int i = 0; i + sz < arr.length; i += sz + sz) {
+                //边界：i + sz + sz - 1 > arr.length
+                merge(arr, i, i + sz - 1, Math.min(i + sz + sz - 1, arr.length - 1));
+            }
+        }
+    }
+
+    public static void mergeSort(int[] arr){
+        mergeSortInternal(arr, 0, arr.length - 1);
+    }
+
+    /**
+     * 在arr[left, right]区间上进行归并排序
+     * @param arr
+     * @param left
+     * @param right
+     */
+    private static void mergeSortInternal(int[] arr, int left, int right) {
+        if(right - left <= 15) {
+            //当子数组中只剩下一个元素的时候，直接返回
+            insertionSort(arr, left, right);
+            return;
+        }
+        int mid = left + (right - left) / 2;
+        mergeSortInternal(arr, left, mid);
+        mergeSortInternal(arr, mid + 1, right);
+        //让[left, mid] 和 [mid + 1, right]区间内的元素此时已经有序，仅需要将其合并即可
+        if(arr[mid] > arr[mid + 1]){
+            //只有当乱序的时候才进行拼接
+            merge(arr, left, mid, right);
+        }
+    }
+
+    /**
+     * 在arr[left, right]区间进行插入排序
+     * @param arr
+     * @param left
+     * @param right
+     */
+    private static void insertionSort(int[] arr, int left, int right) {
+        for (int i = left + 1; i <= right; i++) {
+            int val = arr[i];
+            int j = i;
+            for(; j > left && val < arr[j - 1]; j--){
+                arr[j] = arr[j - 1];
+            }
+            arr[j] = val;
+        }
+    }
+
+    /**
+     * 将有序子数组[left, mid]和[mid + 1, right]区间的两个子元素合并为一个大数组
+     * @param arr
+     * @param left
+     * @param mid
+     * @param right
+     */
+    private static void merge(int[] arr, int left, int mid, int right) {
+        //先创建一个新的临时数组，将子数组的值复制给新数组
+        int[] aux = new int[right - left + 1];
+        for (int i = 0; i < aux.length; i++) {
+            //aux的索引为[0, right - left)，元素的起点从i = 0开始
+            //但是对arr数组来说，元素的元素的起点在left处，和i正好差了left个偏移量
+            aux[i] = arr[i + left];
+        }
+        int i = left;
+        int j = mid + 1;
+        for (int k = left; k <= right; k++) {
+            if(i > mid){
+                //[left, mid]区间的子数组已经遍历完毕
+                arr[k] = aux[j - left];
+                j++;
+            }else if(j > right){
+                //[mid + 1, right]区间的子数组已经遍历完毕
+                arr[k] = aux[i - left];
+                i++;
+            }else if(aux[i - left] <= aux[j - left]){
+                //将aux[i - left]写回到arr[k]
+                arr[k] = aux[i - left];
+                i++;
+            }else{
+                //aux[i - left] > aux[j - left]，将aux[j - left]写回arr[k]中
+                arr[k] = aux[j - left];
+                j++;
+            }
+        }
+    }
+
+    /**
+     * 希尔排序 - 基于优化后的插入排序的希尔排序
+     * @param arr
+     */
+    public static void shellSort(int[] arr){
+        int gap = arr.length >> 1;
+        while(gap >= 1){
+            for (int i = gap; i < arr.length; i++) {
+                int val =arr[i];
+                int j = i;
+                for(; j >= gap && val < arr[j - gap]; j -= gap){
+                    arr[j] = arr[j - gap];
+                }
+                arr[j] = val;
+            }
+            gap = gap >> 1;
+        }
+    }
+
+    /**
+     * 希尔排序 - 按照gap将原数组分为gap个子数组，子数组内部先排序，不断缩小gap值，直到gap = 1
+     * @param arr
+     */
+//    public static void shellSort(int[] arr){
+//        int gap = arr.length >> 1;
+//        //预处理阶段，当gap == 1的时候，最后进行一次插入排序
+//        while(gap >= 1){
+//            //按照gap分组，组内进行插入排序
+//            insertionByGap(arr, gap);
+//            gap = gap >> 1;
+//        }
+//    }
+//
+//    private static void insertionByGap(int[] arr, int gap) {
+//        for (int i = gap; i < arr.length; i++) {
+//            for (int j = i ; j >= gap && arr[j] < arr[j - gap]; j -= gap) {
+//                arr[j] = arr[j - gap];
+//            }
+//        }
+//    }
+
 
     /**
      * 直接插入排序
@@ -17,13 +161,33 @@ public class SevenSort {
      * 待排序区间[i, n)
      * @param arr
      */
+
     public static void insertionSort(int[] arr){
         for (int i = 1; i < arr.length; i++) {
             //让j指向待排序元素区间的第一个元素
+
             for (int j = i; j >= 1 && arr[j] < arr[j - 1]; j--) {
                 //只有当arr[j] < arr[j - 1]时，才需要移动元素，直到该元素已到达合适位置
                 swap(arr, j, j - 1);
             }
+        }
+    }
+
+    /**
+     * 优化后的直接插入排序，当待排序元素小于前一个元素的时候，不再两两交换
+     * 而是不断向后搬移元素，直到待排序元素大于或等于前一个元素时，其所在位置就是插入位置
+     * 减少了调用swap方法的时间
+     * @param arr
+     */
+    public static void insertionSort2(int[] arr){
+        for (int i = 1; i < arr.length; i++) {
+            //让j指向待排序元素区间的第一个元素
+            int val = arr[i];
+            int j = i;
+            for (; j >= 1 && val < arr[j - 1]; j--) {
+                arr[j] = arr[j - 1];
+            }
+            arr[j] = val;
         }
     }
 
