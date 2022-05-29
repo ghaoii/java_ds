@@ -1,6 +1,11 @@
 package sort;
 
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.concurrent.ThreadLocalRandom;
+
 public class SevenSort {
+    private static ThreadLocalRandom random = ThreadLocalRandom.current();
     public static void main(String[] args) {
         int n = 10000000;
         //int[] arr = SortHelper.generateSortedArray(n, 10);
@@ -14,6 +19,111 @@ public class SevenSort {
         SortHelper.testSort(SortHelper.arrCopy(arr), "heapSort");
         SortHelper.testSort(SortHelper.arrCopy(arr), "mergeSort");
         SortHelper.testSort(SortHelper.arrCopy(arr), "mergeSortNonRecursion");
+        SortHelper.testSort(SortHelper.arrCopy(arr), "quickSort");
+        SortHelper.testSort(SortHelper.arrCopy(arr), "quickSortHoare");
+    }
+
+    public static void quickSortHoare(int[] arr){
+        quickSortInternalHoare(arr, 0, arr.length - 1);
+    }
+
+    private static void quickSortInternalHoare(int[] arr, int l, int r) {
+        if(r - l <= 15){
+            insertionSort(arr, l, r);
+            return;
+        }
+        int p = partitionHoare(arr, l, r);
+        quickSortInternalHoare(arr, l, p - 1);
+        quickSortInternalHoare(arr, p + 1, r);
+    }
+
+    private static int partitionHoare(int[] arr, int l, int r){
+        int randomIndex = random.nextInt(l, r);
+        swap(arr, l, randomIndex);
+        int v = arr[l];
+        int i = l;
+        int j = r;
+        while(i < j){
+            //让j不断向左走，直到碰到第一个小于等于v的元素
+            while(i < j && arr[j] >= v){
+                j--;
+            }
+            //填i的坑，挖j的坑
+            arr[i] = arr[j];
+            //让i不断向右走，直到碰到第一个大于等于v的元素
+            while(i < j && arr[i] <= v){
+                i++;
+            }
+            //填j的坑，挖i的坑
+            arr[j] = arr[i];
+        }
+        //当走完这个循环，i == j，此时这个坑由v来填
+        //v的左边都是小于v的元素，右边都是大于v的元素
+        arr[i] = v;
+        return i;
+    }
+
+
+    /**
+     * 快速排序的递归写法
+     * @param arr
+     */
+    public static void quickSortNonRecursion(int[] arr){
+        Deque<Integer> stack = new LinkedList<>();
+        stack.push(0);
+        stack.push(arr.length - 1);
+        while(!stack.isEmpty()){
+            int r = stack.pop();
+            int l = stack.pop();
+            //分区操作
+            if(l >= r){
+                continue;
+            }
+            int p = partition(arr, l, r);
+            //把左数组和右数组分别压入占中，
+            stack.push(l);
+            stack.push(p - 1);
+
+            stack.push(p + 1);
+            stack.push(r);
+        }
+    }
+
+    public static void quickSort(int[] arr){
+        quickSortInternal(arr, 0, arr.length - 1);
+    }
+
+    private static void quickSortInternal(int[] arr, int l, int r) {
+        if(r - l <= 15){
+            insertionSort(arr, l, r);
+            return;
+        }
+        int p = partition(arr, l, r);
+        //让所有小于arr[p]的元素继续进行排序
+        quickSortInternal(arr, l, p - 1);
+        //让所有大于等于arr[p]的元素继续进行排序
+        quickSortInternal(arr, p + 1, r);
+    }
+
+    private static int partition(int[] arr, int l, int r) {
+        int randomIndex = random.nextInt(l, r);
+        swap(arr, l, randomIndex);
+        int v = arr[l];
+        //[l + 1, j]是小于v的元素
+        //在最开始的时候，该区间没有元素，所以让j = l
+        int j = l;
+        //[j + 1, i)之间的元素是大于等于v的元素
+        for (int i = l + 1; i <= r; i++) {
+            //如果i指向的元素大于v，无序操作，直接让i后移即可
+            if(arr[i] < v){
+                //当i指向的元素小于v，让i与j + 1处的元素交换，同时j++
+                swap(arr, i, j + 1);
+                j++;
+            }
+        }
+        //走完循环之后，j处的元素是小于v的，交换其与l处的元素，交换后的v正处于正确的位置
+        swap(arr, l, j);
+        return j;
     }
 
     /**
@@ -174,7 +284,7 @@ public class SevenSort {
     }
 
     /**
-     * 优化后的直接插入排序，当待排序元素小于前一个元素的时候，不再两两交换
+     * 优化后的直接插入排序，当待排序元素小于前一个元素的时候，不再是两两交换
      * 而是不断向后搬移元素，直到待排序元素大于或等于前一个元素时，其所在位置就是插入位置
      * 减少了调用swap方法的时间
      * @param arr
