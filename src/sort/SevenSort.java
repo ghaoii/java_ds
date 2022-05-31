@@ -7,20 +7,18 @@ import java.util.concurrent.ThreadLocalRandom;
 public class SevenSort {
     private static ThreadLocalRandom random = ThreadLocalRandom.current();
     public static void main(String[] args) {
-        int n = 10000000;
+        int n = 100000;
         //int[] arr = SortHelper.generateSortedArray(n, 10);
         int[] arr = SortHelper.generaRandomArray(n, 0, Integer.MAX_VALUE);
-        //SortHelper.testSort(SortHelper.arrCopy(arr), "selectionSort");
-        //SortHelper.testSort(SortHelper.arrCopy(arr), "selectionSortOP");
-        //SortHelper.testSort(SortHelper.arrCopy(arr), "insertionSort");
-        //SortHelper.testSort(SortHelper.arrCopy(arr), "insertionSort2");
-        //SortHelper.testSort(SortHelper.arrCopy(arr), "insertionSortBS");
-        SortHelper.testSort(SortHelper.arrCopy(arr), "shellSort");
+//        SortHelper.testSort(SortHelper.arrCopy(arr), "selectionSort");
+//        SortHelper.testSort(SortHelper.arrCopy(arr), "selectionSortOP");
+//        SortHelper.testSort(SortHelper.arrCopy(arr), "insertionSort");
+//        SortHelper.testSort(SortHelper.arrCopy(arr), "insertionSort2");
+//        SortHelper.testSort(SortHelper.arrCopy(arr), "insertionSortBS");
+//        SortHelper.testSort(SortHelper.arrCopy(arr), "shellSort");
         SortHelper.testSort(SortHelper.arrCopy(arr), "heapSort");
         SortHelper.testSort(SortHelper.arrCopy(arr), "mergeSort");
-        SortHelper.testSort(SortHelper.arrCopy(arr), "mergeSortNonRecursion");
         SortHelper.testSort(SortHelper.arrCopy(arr), "quickSort");
-        SortHelper.testSort(SortHelper.arrCopy(arr), "quickSortHoare");
     }
 
     public static void quickSortHoare(int[] arr){
